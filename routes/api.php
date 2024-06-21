@@ -9,7 +9,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-// GUEST Roues
+/**
+ *  GUEST Roues
+ */
 Route::controller(AuthenticationController::class)->group(function (){
     Route::get('/login', 'showLogin')->name('login.screen');
     Route::post('/login', 'login')->name('login');
@@ -18,3 +20,11 @@ Route::controller(AuthenticationController::class)->group(function (){
     Route::post('/register', 'register')->name('register');
 });
 
+/**
+ *  SANCTUM-PROTECTED Routes
+ */
+Route::group(['middleware'=> ['auth:sanctum']], function (){
+    Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
+
+    
+});

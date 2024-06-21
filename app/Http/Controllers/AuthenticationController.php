@@ -29,7 +29,7 @@ class AuthenticationController extends Controller
         return $this->success([
             'user' => $user,
             'token' => $user->createToken('Token of ' . $user->name)->plainTextToken,
-        ]);
+        ], 'User Registration Success!', 201);
 
         // return response()->json([
         //     'message' => 'You have successfully registered!'
@@ -49,20 +49,16 @@ class AuthenticationController extends Controller
 
         return $this->success([
             'user' => $user,
-            'token' => $user->createToken('tomsworld' . $user->name)->plainTextToken,
-        ])
-
-        // if (!$user || !Hash::check($request->password, $user->password)) {
-        //     throw ValidationException::withMessages([
-        //         'email' => ['The provided credentials are incorrect.'],
-        //     ]);
-        // }
-
-        // $token = $user->createToken('auth-token')->plainTextToken;
-
-        // return response()->json(['token' => $token], 200);
+            'token' => $user->createToken('Token of ' . $user->name)->plainTextToken,
+        ], 'Logged in Successfully!');
     }
 
+    public function logout(Request $request)
+    {
+        Auth::user()->currentAccessToken()->delete();
+        return $this->success(null, 'Logged out Successfully.');
+    }
+    
     public function showRegister()
     {
         return view('auth.register');
@@ -73,10 +69,5 @@ class AuthenticationController extends Controller
         return view('auth.login');
     }   
 
-    public function logout(Request $request)
-    {
-        $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logged out successfully'], 200);
-    }
 }
