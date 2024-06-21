@@ -2,53 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginUserRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthenticationController extends Controller
 {
-    
-    public function register(Request $request)
+    use HttpResponses;
+
+    public function register(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required|string|min:10', Password::mixedCase()->letters()->numbers()->symbols()]
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
-        return response()->json([
-            'message' => 'User registered successfully'
-            ],201);
+        return $this->success([
+            'user' => $user,
+            'token' => $user->createToken('Token of ' . $user->name)->plainTextToken,
+        ]);
+
+        // return response()->json([
+        //     'message' => 'You have successfully registered!'
+        //     ],201);
     }
 
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string|alphanumeric|min:10',
-        ]);
+        $validated = $request->validated();
 
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        if(!Auth::attempt($request->only('email', 'password')))
+        {
+            return $this->error(null, 'Credentials do not match in the database.', 401);
         }
 
-        $token = $user->createToken('auth-token')->plainTextToken;
+        $user = User::where('email', $validated['email'])->first();
 
-        return response()->json(['token' => $token], 200);
+        return $this->success([
+            'user' => $user,
+            'token' => $user->createToken('tomsworld' . $user->name)->plainTextToken,
+        ])
+
+        // if (!$user || !Hash::check($request->password, $user->password)) {
+        //     throw ValidationException::withMessages([
+        //         'email' => ['The provided credentials are incorrect.'],
+        //     ]);
+        // }
+
+        // $token = $user->createToken('auth-token')->plainTextToken;
+
+        // return response()->json(['token' => $token], 200);
     }
+
+    public function showRegister()
+    {
+        return view('auth.register');
+    }   
+
+    public function showLogin()
+    {
+        return view('auth.login');
+    }   
 
     public function logout(Request $request)
     {
