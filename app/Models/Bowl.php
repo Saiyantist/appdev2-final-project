@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Bowl extends Model
 {
     use HasFactory;
 
@@ -14,13 +14,13 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function bowl()
+    public function order()
     {
-        return $this->hasOne(Bowl::class);
+        return $this->belongsTo(Order::class);
     }
 
-    public function userAddress()
+    public function bowlItems()
     {
-        return $this->hasOneThrough(Address::class, User::class);
+        return $this->hasMany(BowlItem::class);
     }
 }
