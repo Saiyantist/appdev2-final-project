@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignid('user_id')->constrained();
             $table->string('house_num', 8);
-            $table->string('street name');
+            $table->string('street_name');
             $table->string('town');
             $table->string('city');
             $table->unsignedSmallInteger('zip_code');

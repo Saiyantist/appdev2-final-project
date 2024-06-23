@@ -11,6 +11,7 @@ class Bowl extends Model
 
     protected $fillable =[
         'user_id',
+        'order_id',
         'total_amount',
     ];
 

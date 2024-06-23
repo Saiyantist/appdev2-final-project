@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class BowlFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => null, // This will be set later
+            'order_id' => null, // This will be set later
+            'total_amount' => 0, // This will be calculated later
         ];
     }
 }

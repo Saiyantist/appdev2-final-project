@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('bowl_id')->constrained()->onDelete('cascade');
-            $table->foreignId('address_id')->nullable()->constrained()->onDelete('cascade');
-            $table->date('ship_by_date');
+            $table->string('ship_by_date');
             $table->enum('status', ['placed', 'canceled', 'completed']);
             $table->datetimes();
         });
