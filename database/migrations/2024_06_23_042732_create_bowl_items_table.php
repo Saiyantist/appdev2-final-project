@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bowl_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bowl_id')->constrained()->onDelete('cascade');
+            $table->foreignId('bowl_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('fish_id')->constrained()->onDelete('cascade');
             $table->unsignedTinyInteger('quantity');
             $table->unsignedBigInteger('sub_total');

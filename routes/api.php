@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\FishController;
+use App\Http\Controllers\BowlItemController;
+use App\Http\Controllers\BowlController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\FishbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +32,12 @@ Route::controller(AuthenticationController::class)->group(function (){
 Route::group(['middleware'=> ['auth:sanctum']], function (){
     Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
 
-    
+    Route::apiResources([
+        'address' => AddressController::class,
+        'bowl_items' => BowlItemController::class,
+        'bowls' => BowlController::class,
+        'fishbacks' => FishbackController::class,
+        'fishes' => FishController::class,
+        'orders' => OrderController::class,
+    ]);
 });

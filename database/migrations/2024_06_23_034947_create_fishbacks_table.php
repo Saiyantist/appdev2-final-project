@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('fish_id')->constrained()->onDelete('cascade');
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->unsignedTinyInteger('rating');
             $table->string('review');
             $table->datetimes();

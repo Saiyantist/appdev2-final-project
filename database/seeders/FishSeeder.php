@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Fish;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +44,8 @@ class FishSeeder extends Seeder
                 'price' => fake()->numberBetween(50, 1000),
                 'description' => fake()->paragraph(3, false),
                 'stock' => fake()->numberBetween(100, 500),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
         }
 

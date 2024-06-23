@@ -23,6 +23,6 @@ class Fish extends Model
 
     public function fishbacks()
     {
-        return $this->hasManyThrough(Fishback::class, Order::class);
+        return $this->hasMany(Fishback::class);
     }
 }

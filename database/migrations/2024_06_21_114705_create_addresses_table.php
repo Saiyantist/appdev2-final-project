@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('street_name');
             $table->string('town');
             $table->string('city');
-            $table->unsignedSmallInteger('zip_code');
+            $table->string('zip_code');
             $table->datetimes();
         });
     }

@@ -20,7 +20,7 @@ class FishbackFactory extends Factory
             'fish_id' => null, // This will be set later
             'order_id' => null, // This will be set later
             'rating' => fake()->numberBetween(1, 5), // Random rating between 1 and 5
-            'review' => fake()->paragraph(), // Random review text
+            'review' => fake()->paragraph(3, false), // Random review text
         ];
     }
 }

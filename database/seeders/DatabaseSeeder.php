@@ -76,6 +76,7 @@ class DatabaseSeeder extends Seeder
                 $fishbacks = Fishback::factory()->make([
                     'fish_id' => $fish->id,
                     'order_id' => $order->id,
+                    'user_id' => $user->id,
                 ]);
 
                 // SAVE the fishback

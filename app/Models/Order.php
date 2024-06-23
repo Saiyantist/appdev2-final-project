@@ -33,7 +33,7 @@ class Order extends Model
 
     public function fishbacks()
     {
-        return $this->hasMany(Fishback::class);
+        return $this->hasOne(Fishback::class);
     }
 
 

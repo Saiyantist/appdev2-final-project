@@ -42,9 +42,6 @@ class StoreUserRequest extends FormRequest
         return [
             'name.required' => 'need ng name pre',
             'password.regex' => 'The password must contain a lowercase letter, an uppercase letter, one number, and one symbol i.e. "@ $ ! % * # ? &"',
-            // 'password[4]' => 'The password must contain an uppercase letter',
-            // 'password[5]' => 'The password must contain at least one (1) digit',
-            // 'password[6]' => 'The password must contain at least one (1) symbol i.e. "@ $ ! % * # ? &"',
         ];
      
     }

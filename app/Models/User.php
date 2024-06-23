@@ -55,12 +55,12 @@ class User extends Authenticatable
 
     public function bowl()
     {
-        return $this->hasOne(Bowl::class);
+        return $this->hasMany(Bowl::class);
     }
 
     public function fishbacks()
     {
-        return $this->hasManyThrough(Fishback::class, Order::class);
+        return $this->hasMany(Fishback::class);
     }
     
 }
