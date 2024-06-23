@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->unsignedTinyInteger('rating');
             $table->string('review');
-            $table->dateTime('created_at');
+            $table->datetimes();
         });
     }
 

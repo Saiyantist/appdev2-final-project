@@ -30,4 +30,11 @@ class Order extends Model
     {
         return $this->hasOneThrough(Address::class, User::class);
     }
+
+    public function fishbacks()
+    {
+        return $this->hasMany(Fishback::class);
+    }
+
+
 }
