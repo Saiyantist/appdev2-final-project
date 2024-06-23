@@ -9,6 +9,13 @@ class Fish extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'price',
+        'description',
+        'stock',
+    ];
+
     public function bowlItem()
     {
         return $this->belongsTo(bowlItem::class);

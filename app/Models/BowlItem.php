@@ -9,6 +9,13 @@ class BowlItem extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'fish_id',
+        'bowl_id',
+        'quantity',
+        'sub_total',
+    ];
+
     public function bowl()
     {
         return $this->belongsTo(Bowl::class);

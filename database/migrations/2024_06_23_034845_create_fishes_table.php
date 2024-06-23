@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('fishes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fishback_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->unsignedMediumInteger('price');
             $table->string('description', 4000);

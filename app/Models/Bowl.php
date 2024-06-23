@@ -9,6 +9,11 @@ class Bowl extends Model
 {
     use HasFactory;
 
+    protected $fillable =[
+        'user_id',
+        'total_amount',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
