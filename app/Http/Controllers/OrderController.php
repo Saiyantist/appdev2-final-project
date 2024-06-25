@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
 
 class OrderController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */

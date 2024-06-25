@@ -9,7 +9,6 @@ use App\Models\BowlItem;
 use App\Models\Fish;
 use App\Models\Order;
 use App\Traits\HttpResponses;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BowlItemController extends Controller
@@ -22,7 +21,7 @@ class BowlItemController extends Controller
     {
         $bowlId = Bowl::where('user_id', Auth::user()->id)->pluck('id');
 
-        $bowlItems = BowlItem::whereIn('bowl_id', $bowlId)->get()->toArray();
+        $bowlItems = BowlItem::whereIn('bowl_id', $bowlId)->get()->groupBy('bowl_id')->toArray();
 
         if(empty($bowlItems))
         {
@@ -33,7 +32,6 @@ class BowlItemController extends Controller
         {
             return $this->success($bowlItems, 'All YOUR Bowl Items.', 200);
         }
-
     }
 
     /**
@@ -52,11 +50,10 @@ class BowlItemController extends Controller
             $hasBowl = Bowl::with('bowlItems')->where('user_id', $userId)->first();
             $hasOrder = Order::where('user_id', $userId)->first();
 
-            $bowlItems = $hasBowl->bowlItems->toArray();
-
             // Check if has EXISTING Bowl but not yet CHECKED-OUT (Orded Placed).
             if($hasBowl && !$hasOrder)
             {
+                $bowlItems = $hasBowl->bowlItems->toArray();
 
                 // Check if NO EXISTING Bowl Items
                 if(empty($bowlItems))
@@ -81,7 +78,6 @@ class BowlItemController extends Controller
 
                 elseif(!empty($bowlItems))
                 {
-                    // dd(count($bowlItems) > 1);
 
                     // Check if Bowl Items is more than 1,
                     // To FURTHER check for duplicate Bowl Items with same fish_id.
@@ -230,13 +226,11 @@ class BowlItemController extends Controller
             if($fish->stock >= $validated['quantity'])
             {
                 // dd('Stock is greater, Update me');
-                // BowlItem::where('id', $bowlItem->id)
-                // ->update([
-                //     'quantity' => $validated['quantity'],
-                // ]);
-        
-                // Update only the validated fields = DYNAMIC
-                $bowlItem->update($validated);
+                BowlItem::where('id', $bowlItem->id)
+                ->update([
+                    'quantity' => $validated['quantity'],
+                    'sub_total' => $fish->price * $validated['quantity'],
+                ]);
 
                 $bowlItem = BowlItem::where('id', $bowlItem->id)->first();
                 return $this->success($bowlItem, 'Bowl Item details successfully Updated!', 200);
