@@ -40,7 +40,7 @@ class FishSeeder extends Seeder
         for ($fish; $fish > 0; $fish-- )
         {
             DB::table('fish')->insert([
-                'name' => fake()->randomElement($fishNames),
+                'name' => $fishNames[$fish],
                 'price' => fake()->numberBetween(50, 1000),
                 'description' => fake()->paragraph(3, false),
                 'stock' => fake()->numberBetween(100, 500),

@@ -55,13 +55,11 @@ class FishController extends Controller
     public function update(UpdateFishRequest $request, Fish $fish)
     {
         $validated = $request->validated();
-        Fish::where('id', $fish->id)
-        ->update([
-            'name' => $validated['name'],
-            'price' => $validated['price'],
-            'description' => $validated['description'],
-            'stock' => $validated['stock'],
-        ]);
+
+
+        // Update only the validated fields = DYNAMIC
+        $fish->update($validated);
+
         $fish = Fish::where('id', $fish->id)->first();
         return $this->success($fish, 'Fish details successfully Updated!', 200);
     }
@@ -72,6 +70,6 @@ class FishController extends Controller
     public function destroy(Fish $fish)
     {
         $fish->delete();
-        return $this->success(null, 'Fish listing successfully Removed');
+        return $this->success(null, 'Fish listing successfully Removed!', 204);
     }
 }

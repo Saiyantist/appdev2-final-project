@@ -96,7 +96,7 @@ class AddressController extends Controller
         }
         else
         {
-            return $this->error(null, 'You can\'t change what is not yours.', 400);
+            return $this->error(null, 'You can\'t change what is not yours.', 403);
         }
     }
 
