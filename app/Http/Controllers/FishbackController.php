@@ -3,16 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fishback;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
+use Illuminate\Support\Facades\Auth;
 
 class FishbackController extends Controller
 {
+    use HttpResponses;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $fishbacks = Fishback::with('fish')->get();
+
+        return $this->success($fishbacks, 'ALL Fishbacks', 200);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function myFishbacks()
+    {
+        $fishbacks = User::where('id', Auth::user()->id)->with('fishbacks')->get();
+
+        return $this->success($fishbacks, 'ALL Fishbacks', 200);
     }
 
     /**
@@ -28,7 +44,7 @@ class FishbackController extends Controller
      */
     public function show(Fishback $fishback)
     {
-        //
+        return $this->success($fishback, 'A Fishback', 200);
     }
 
     /**
@@ -36,7 +52,7 @@ class FishbackController extends Controller
      */
     public function update(Request $request, Fishback $fishback)
     {
-        //
+        return $this->error(null, 'Bad Request', 400);
     }
 
     /**
@@ -44,6 +60,6 @@ class FishbackController extends Controller
      */
     public function destroy(Fishback $fishback)
     {
-        //
+        
     }
 }

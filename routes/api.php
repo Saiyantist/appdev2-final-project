@@ -40,4 +40,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function (){
         'fishes' => FishController::class,
         'orders' => OrderController::class,
     ]);
+
+    Route::get('/myfishbacks', [FishbackController::class, 'myFishbacks'])->name('user.fishbacks');
+
 });

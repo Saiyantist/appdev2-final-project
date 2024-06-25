@@ -92,7 +92,7 @@ class AddressController extends Controller
                 "zip_code" => $validated['zip_code'],
             ]);
             $address = Address::where('id', $currentAddressId)->first();
-            return $this->success($address, 'Address successfully Updated!!', 200);
+            return $this->success($address, 'Address successfully Updated!!', 201);
         }
         else
         {

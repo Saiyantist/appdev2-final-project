@@ -61,7 +61,7 @@ class FishController extends Controller
         $fish->update($validated);
 
         $fish = Fish::where('id', $fish->id)->first();
-        return $this->success($fish, 'Fish details successfully Updated!', 200);
+        return $this->success($fish, 'Fish details successfully Updated!', 201);
     }
 
     /**

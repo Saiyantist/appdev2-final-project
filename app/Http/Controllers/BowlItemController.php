@@ -23,15 +23,22 @@ class BowlItemController extends Controller
 
         $bowlItems = BowlItem::whereIn('bowl_id', $bowlId)->get()->groupBy('bowl_id')->toArray();
 
-        if(empty($bowlItems))
-        {
-            return $this->success(null, 'You have no Bowl Items', 200);
-        }
+        $bowlItemsIds = array_keys($bowlItems);
 
-        else if (!empty($bowlItems))
-        {
-            return $this->success($bowlItems, 'All YOUR Bowl Items.', 200);
+        // dd($bowlItemsIds);
+        
+        for($i = 0; $i <= count($bowlItemsIds) - 1; $i++)
+        {   
+            $orderId = Bowl::where('id', $bowlItemsIds[$i])->pluck('order_id')->implode(',');
+
+            $status = Order::where('id', $orderId)->pluck('status')->implode(',');
+
+            if(!in_array($status, ['placed', 'canceled', 'completed']))
+            {
+                return $this->success(Bowl::where('id', $bowlItemsIds[$i])->with('bowlItems')->get('id'), 'All YOUR Bowl Items.', 200);
+            }
         }
+        return $this->error(null, 'No Active Bowls, Go Scoop up sommeee fish!', 200);
     }
 
     /**
@@ -47,11 +54,10 @@ class BowlItemController extends Controller
         // Check if sufficient stocks
         if($fish->stock >= $validated['quantity'])
         {
-            $hasBowl = Bowl::with('bowlItems')->where('user_id', $userId)->first();
-            $hasOrder = Order::where('user_id', $userId)->first();
+            $hasBowl = Bowl::with('bowlItems')->where('user_id', $userId)->where('order_id', null)->first();
 
             // Check if has EXISTING Bowl but not yet CHECKED-OUT (Orded Placed).
-            if($hasBowl && !$hasOrder)
+            if(!is_null($hasBowl))
             {
                 $bowlItems = $hasBowl->bowlItems->toArray();
 
@@ -175,7 +181,12 @@ class BowlItemController extends Controller
         
                 return $this->success($bowlItem, 'Bowl Item succssfully Added to new Bowl', 201);
             }
-    
+            
+            // elseif ()
+            // {
+
+            // }
+
         }
 
         elseif ($fish->stock < $validated['quantity'])
@@ -183,6 +194,7 @@ class BowlItemController extends Controller
             $data = ['Fish\'s stock' => $fish->stock, 'Your desired quantity to buy' => $validated['quantity']];
             return $this->error($data, 'Insufficient Fish stock. Please lower your quantity find any other fish we have.', 409);
         }
+
     }
 
     /**
@@ -225,7 +237,6 @@ class BowlItemController extends Controller
             // Check if sufficient stocks
             if($fish->stock >= $validated['quantity'])
             {
-                // dd('Stock is greater, Update me');
                 BowlItem::where('id', $bowlItem->id)
                 ->update([
                     'quantity' => $validated['quantity'],
@@ -233,7 +244,7 @@ class BowlItemController extends Controller
                 ]);
 
                 $bowlItem = BowlItem::where('id', $bowlItem->id)->first();
-                return $this->success($bowlItem, 'Bowl Item details successfully Updated!', 200);
+                return $this->success($bowlItem, 'Bowl Item details successfully Updated!', 201);
             }
     
             elseif ($fish->stock < $validated['quantity'])
@@ -241,13 +252,8 @@ class BowlItemController extends Controller
                 $data = ['Fish\'s stock' => $fish->stock, 'Your desired quantity to buy' => $validated['quantity']];
                 return $this->error($data, 'Insufficient Fish stock. Please lower your quantity find any other fish we have.', 409);
             }
-            
-
-            // return $this->success($fish, 'Your Bowl Item.', 200);
 
             return $this->success(BowlItem::where('id', $bowlItem->id)->get(), 'Your Bowl Item.', 200);
-
-
     
         }
 
