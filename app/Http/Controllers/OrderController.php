@@ -21,14 +21,24 @@ class OrderController extends Controller
     {
         $orders = Order::where('user_id', Auth::user()->id)->get();
 
+        
         if(count($orders) == 0)
         {
             return $this->success(null, 'You have no Orders. Go Scoop up sommeee fish!', 200);
         }
-
+        
         else if (count($orders) > 0)
         {
-            return $this->success($orders, 'All YOUR Orders.', 200);
+            foreach($orders as $order){
+                $bowl = Bowl::where('order_id', $order->id)->with('bowlItems')->first();
+                
+                $data[] = [
+                    'Order ID' => $order->id,
+                    'Order Status' => $order->status,
+                    'Bowl' => $bowl,
+                ];
+            }
+            return $this->success($data, 'Your Order and its Bowl Items', 200);
         }
     }
 
@@ -37,10 +47,8 @@ class OrderController extends Controller
      */
     public function store()
     {
-        // $userBowls = Bowl::where('user_id', Auth::user()->id)->pluck('id')->toArray();
         $bowlToOrder = Bowl::where('user_id', Auth::user()->id)->where('order_id', null)->get();
 
-        
         if(count($bowlToOrder) == 0)
         {
             return $this->success(null, 'You have no bowl. Go scoop up some of our fishes!', 200);
@@ -74,7 +82,7 @@ class OrderController extends Controller
         
         else
         {
-            return $this->error(null, 'Seems like we don\'t know this', 400);
+            return $this->error(null, 'Seems like we both don\'t know this', 400);
         }
 
         // $orders = Order::where('user_id', Auth::user()->id)->get();
@@ -88,9 +96,6 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $orderId = Order::where('user_id', Auth::user()->id)->pluck('id')->toArray();
-
-        // dd($orderId);
-        // $bowlItems =  BowlItem::whereIn('bowl_id', $bowlId)->pluck('id')->toArray();
 
         if (in_array($order->id, $orderId))
         {
@@ -148,7 +153,7 @@ class OrderController extends Controller
         if(in_array($order->id, $checkOrder))
         {
             $order->delete();
-            return $this->success(Order::find($order->id) ? 'meron pa eh' : null, 'Order successfully Updated!', 201);
+            return $this->success(Order::find($order->id) ? 'meron pa eh' : null, 'Order successfully Deleted!', 204);
         }
 
         elseif(!in_array($order->id, $checkOrder))

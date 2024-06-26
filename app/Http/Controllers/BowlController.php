@@ -42,7 +42,9 @@ class BowlController extends Controller
                 // Check if Bowl does not belong to an Order yet
                 // Displays the Bowl if TRUE
                 if($status == ""){
+
                     $bowl = Bowl::where('id',$order['bowl_id'])->with('bowlItems')->get();
+
                     $bowlItems = $bowl->first()->bowlItems;
 
                     foreach($bowlItems as $bowlItem)
@@ -50,8 +52,6 @@ class BowlController extends Controller
                         $totalAmount[] = $bowlItem->sub_total;
                     }
                     
-                    // dd($bowl);
-
                     $bowl->first()->update([
                         'total_amount' => array_sum($totalAmount),
                     ]);
@@ -61,12 +61,11 @@ class BowlController extends Controller
                 }
             }
 
-            // If all BOWL belongs to order, inform user of empty Bowl.
-            return $this->success(null, 'Your Bowl is empty.', 200);
+            // If all collected bowls is already checked out, inform user of empty Bowl.
+            return $this->success(null, 'Your Bowl is empty. Go Scoop up sommeee fish!', 200);
         }
 
-        // This means user Has No Orders yet.
-        // Window Shopper
+        // This means user Has No Orders yet. (a Window Shopper haha)
         elseif(count($bowls) == 1)
         {
             $bowlItems = $bowls->first()->bowlItems;
@@ -84,7 +83,7 @@ class BowlController extends Controller
             return $this->success($bowls, 'Your Bowl.', 200);
         }
 
-        // This means user is FIRST-TIME User
+        // This means user is a FIRST-TIME User
         elseif(count($bowls) == 0)
         {
             return $this->success(null, 'Add a fish now to get a bowl!', 200);

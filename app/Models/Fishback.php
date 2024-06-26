@@ -12,6 +12,7 @@ class Fishback extends Model
     protected $fillable = [
         'fish_id',
         'order_id',
+        'user_id',
         'rating',
         'review',
     ];

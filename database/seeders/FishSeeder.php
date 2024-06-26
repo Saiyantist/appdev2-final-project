@@ -35,7 +35,7 @@ class FishSeeder extends Seeder
             'Arrowana',
         ];
 
-        $fish = count($fishNames);
+        $fish = count($fishNames) - 1 ;
 
         for ($fish; $fish > 0; $fish-- )
         {

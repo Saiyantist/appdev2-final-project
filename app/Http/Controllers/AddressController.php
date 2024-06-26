@@ -39,7 +39,7 @@ class AddressController extends Controller
         // dd(!is_null($address));
         if(!is_null($address))
         {
-            return $this->error($address, 'You already have an address!', 400);
+            return $this->error($address, 'You already have an address!', 403);
         }
 
         elseif(is_null($address))
@@ -67,7 +67,7 @@ class AddressController extends Controller
         if(Auth::user()->id === $address->user_id){
             return $this->success($address, 'Your Address.', 200);
         }
-        return $this->error(null, 'This is not your address.', 403);
+        return $this->error(null, 'This is not your address.', 401);
     }
 
     /**
@@ -116,7 +116,7 @@ class AddressController extends Controller
         }
         else
         {
-            return $this->error(null, 'This is not your address.', 403);
+            return $this->error(null, 'This is not your address.', 401);
         }
 
         // $deleteAddress = Address::where('user_id', Auth::user()->id)->get();

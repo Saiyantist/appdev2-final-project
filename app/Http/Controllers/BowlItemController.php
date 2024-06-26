@@ -38,7 +38,7 @@ class BowlItemController extends Controller
                 return $this->success(Bowl::where('id', $bowlItemsIds[$i])->with('bowlItems')->get('id'), 'All YOUR Bowl Items.', 200);
             }
         }
-        return $this->error(null, 'No Active Bowls, Go Scoop up sommeee fish!', 200);
+        return $this->error(null, 'No Active Bowls, Go Scoop up sommeee fish!', 404);
     }
 
     /**
@@ -192,7 +192,7 @@ class BowlItemController extends Controller
         elseif ($fish->stock < $validated['quantity'])
         {   
             $data = ['Fish\'s stock' => $fish->stock, 'Your desired quantity to buy' => $validated['quantity']];
-            return $this->error($data, 'Insufficient Fish stock. Please lower your quantity find any other fish we have.', 409);
+            return $this->error($data, 'Insufficient Fish stock. Please lower your quantity find any other fish we have.', 400);
         }
 
     }
@@ -250,7 +250,7 @@ class BowlItemController extends Controller
             elseif ($fish->stock < $validated['quantity'])
             {   
                 $data = ['Fish\'s stock' => $fish->stock, 'Your desired quantity to buy' => $validated['quantity']];
-                return $this->error($data, 'Insufficient Fish stock. Please lower your quantity find any other fish we have.', 409);
+                return $this->error($data, 'Insufficient Fish stock. Please lower your quantity find any other fish we have.', 400);
             }
 
             return $this->success(BowlItem::where('id', $bowlItem->id)->get(), 'Your Bowl Item.', 200);
