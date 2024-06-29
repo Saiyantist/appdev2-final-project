@@ -83,14 +83,7 @@ class AddressController extends Controller
         if($address->id === $currentAddressId)
         {
             $validated = $request->validated();
-            Address::where('id', $currentAddressId)
-            ->update([
-                "house_num" => $validated['house_num'],
-                "street_name" => $validated['street_name'],
-                "town" => $validated['town'],
-                "city" => $validated['city'],
-                "zip_code" => $validated['zip_code'],
-            ]);
+            Address::where('id', $currentAddressId)->update($validated);
             $address = Address::where('id', $currentAddressId)->first();
             return $this->success($address, 'Address successfully Updated!!', 201);
         }

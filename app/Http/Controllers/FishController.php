@@ -56,7 +56,6 @@ class FishController extends Controller
     {
         $validated = $request->validated();
 
-
         // Update only the validated fields = DYNAMIC
         $fish->update($validated);
 
